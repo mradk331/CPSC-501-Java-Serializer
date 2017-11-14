@@ -165,19 +165,22 @@ public class Serializer {
 			
 			
 			
-		// "PrimitiveArray":
+		// "PrimitiveArray":except that an additional length attribute is used, and each element of the array will be 
+				//stored as content to a value or reference element, depending on the component type. For example:
+
+
 		case 3:
 			 field = new Element("Field");
 			 Element arrayO = new Element ("Object");
-			 Element arrayfield = new Element ("Field"); //maybe
+			 ///Element arrayfield = new Element ("Field"); //maybe
 			  fields = obj.getClass().getDeclaredFields();
 		
 			for(int i = 0; i< fields.length; i++)
 			{
-				
-				if(fields.getClass().isArray())
+				System.out.print("Please get hrer");
+				if(fields[i].getType().isArray());
 				{
-					
+					System.out.print("Please get hrer");
 					arrayO = new Element("Object");
 					arrayO.setAttribute("class", fields[i].getDeclaringClass().getName());
 					String hashe = String.valueOf(fields[i].hashCode());
@@ -186,7 +189,19 @@ public class Serializer {
 					
 				Object iArray = fields[i].get(obj);
 					
+					int length = Array.getLength(iArray);
+					arrayO.setAttribute("length", String.valueOf(length));
 					
+					for (int j = 0 ; j < length; j++)
+					{
+						Element value = new Element ("value");
+						value.addContent(String.valueOf(Array.get(fields[i].get(obj), j)));
+						Element ref = new Element ("reference");
+						ref.addContent(hashe);
+						arrayO.addContent(value);
+						arrayO.addContent(ref);
+						
+					}
 					
 				}
 				
@@ -194,7 +209,10 @@ public class Serializer {
 				
 				
 			}
-			
+			root.getRootElement().addContent(arrayO);
+			XMLOutputter arrayout= new XMLOutputter();
+			arrayout.output(root, new FileWriter("src//test.xml"));
+
 		// "Oarray":
 		case 4:
 			
