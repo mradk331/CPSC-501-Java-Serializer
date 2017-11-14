@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class PrimitiveArray {
+public class PrimitiveArray implements Serializable{
 
 	
 

@@ -1,7 +1,7 @@
 
 import java.io.*;
 
-public class primitive {
+public class primitive implements Serializable{
 
 	int first;
 	int second;

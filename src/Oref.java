@@ -19,6 +19,6 @@ public class Oref implements Serializable{
 	public void print()
 	{
 		prim.print();
-		
+		System.out.println();
 	}
 }

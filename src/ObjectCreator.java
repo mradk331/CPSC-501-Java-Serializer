@@ -11,7 +11,7 @@ public class ObjectCreator {
 	public static void main(String [] args)
 	{
 		Scanner scanner = new Scanner(System.in);
-		
+		Serializer serialize;
 		
 		
 		System.out.println("What would you like do do?");
@@ -42,8 +42,13 @@ public class ObjectCreator {
 				argument = scanner.nextInt();	
 				argument1 = scanner.nextInt();
 				argument2 = scanner.nextInt();
-				primitive primitive = new primitive(argument, argument1, argument2)
-;				break;
+				primitive primitive = new primitive(argument, argument1, argument2);
+				primitive.print();
+				serialize = new Serializer();
+				serialize.updateChoice(choice);
+				serialize.Serializer(primitive);
+
+				break;
 			}
 			
 			if(choice == 2)
@@ -53,7 +58,11 @@ public class ObjectCreator {
 				argument1 = scanner.nextInt();
 				argument2 = scanner.nextInt();
 				
-				Oref oref = new Oref(argument, argument1, argument2);
+				Oref objectReference = new Oref(argument, argument1, argument2);
+				objectReference.print();
+				serialize = new Serializer();
+				serialize.updateChoice(choice);
+				serialize.Serializer(objectReference);
 				break;
 			}
 			
@@ -64,8 +73,11 @@ public class ObjectCreator {
 				argument = scanner.nextInt();	
 				argument1 = scanner.nextInt();
 				argument2 = scanner.nextInt();
-				PrimitiveArray primitivearray = new PrimitiveArray(argument, argument1, argument2);
-				
+				PrimitiveArray primitiveArray = new PrimitiveArray(argument, argument1, argument2);
+				primitiveArray.print();
+				serialize = new Serializer();
+				serialize.updateChoice(choice);
+				serialize.Serializer(primitiveArray);
 				break;
 			}
 			
@@ -74,8 +86,14 @@ public class ObjectCreator {
 			{
 				System.out.println("What value would you like to set?, provide an integer");
 				argument = scanner.nextInt();	
+				argument1 = scanner.nextInt();
+				argument2 = scanner.nextInt();
 				
-				
+				Oarray objectArray = new Oarray(argument, argument1, argument2);
+				objectArray.print();
+				serialize = new Serializer();
+				serialize.updateChoice(choice);
+				serialize.Serializer(objectArray);
 				
 				break;
 				
@@ -87,8 +105,14 @@ public class ObjectCreator {
 			{
 				System.out.println("What value would you like to set?, provide an integer");
 				argument = scanner.nextInt();	
+				argument1 = scanner.nextInt();
+				argument2 = scanner.nextInt();
 				
-				
+				collection Collection = new collection(argument, argument1, argument2);
+				Collection.print();
+				serialize = new Serializer();
+				serialize.updateChoice(choice);
+				serialize.Serializer(Collection);
 				
 				break;
 				
@@ -103,7 +127,7 @@ public class ObjectCreator {
 			
 			
 		}
-			
+			scanner.close();
 		
 		
 		
