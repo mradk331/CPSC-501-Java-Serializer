@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Serializer><Object Class="primitive" ID="798154996"><Field Name="first" DeclaingClass="primitive"><Value>2</Value></Field><Field Name="second" DeclaingClass="primitive"><Value>2</Value></Field><Field Name="third" DeclaingClass="primitive"><Value>2</Value></Field></Object></Serializer>
+<Serializer><Field Name="prim" DeclaringClass="Oref"><Reference>1114946</Reference></Field><Object Class="Oref" ID="798154996"><Field Name="first" DeclaingClass="Oref"><Value>2</Value></Field><Field Name="second" DeclaingClass="Oref"><Value>2</Value></Field><Field Name="third" DeclaingClass="Oref"><Value>2</Value></Field></Object></Serializer>

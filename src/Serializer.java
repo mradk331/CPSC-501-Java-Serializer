@@ -54,6 +54,8 @@ public class Serializer {
 		element.setAttribute(new Attribute("Class",obj.getClass().getSimpleName()));
 		element.setAttribute(new Attribute("ID", hash));
 		
+		Element field = null;
+		Field[] fields = null;
 		
 		switch(choice)
 		{
@@ -62,8 +64,8 @@ public class Serializer {
 		// "primitive":
 		case 1:
 			
-		Element field = null;
-		Field[] fields = obj.getClass().getDeclaredFields();	
+		field = null;
+		fields = obj.getClass().getDeclaredFields();	
 		
 		for(int i = 0; i < fields.length; i++) {
 			field = new Element("Field");
@@ -90,7 +92,8 @@ public class Serializer {
 		
 			//element.addContent(field);
 			//root.getRootElement().addContent(element);
-		root.getRootElement().addContent(element);
+		
+		     root.getRootElement().addContent(element);
 			//System.out.println(root. " Is there anything here?") ;
 			XMLOutputter out= new XMLOutputter();
 			out.output(root, new FileWriter("src//test.xml"));
@@ -100,13 +103,97 @@ public class Serializer {
 			
 		// "Oref":
 		case 2:
+			 field = new Element("Field");
+			 Element primfield = new Element ("Field"); //maybe
+			  fields = obj.getClass().getDeclaredFields();
+			
+			  for(int i = 0; i <fields.length; i++)
+			  {
+				 if(!fields[i].getType().isPrimitive()) 
+				 { 
+					 field = new Element("Field");
+					 String hashcode = String.valueOf(fields[i].hashCode());
+					 Attribute name = new Attribute("Name", fields[i].getName());
+					 Attribute decclass = new Attribute("DeclaringClass", fields[i].getDeclaringClass().getName());
+					 field.setAttribute(name);
+					 field.setAttribute(decclass);
+					 System.out.println(decclass.getName());
+					 Element ref = new Element("Reference");
+					 ref.addContent(hashcode);
+					 field.addContent(ref);
+					// element.addContent(field);
+					 
+				 }
+				 
+				 else
+				 {
+					 
+					 //same as first primitive
+					 
+					    primfield = new Element("Field");
+						Attribute attribute = new Attribute("Name" , fields[i].getName());
+						
+						primfield.setAttribute(attribute);
+						primfield.setAttribute("DeclaingClass", fields[i].getDeclaringClass().getSimpleName());
+						
+						
+						
+						Element value = new Element("Value");
+						fields[i].get(obj);  //vlue	
+						//System.out.println(fields[i].get(obj) + "pleasze do somethine");
+						value.addContent(fields[i].get(obj).toString());		
+						System.out.print(fields[i].get(obj).toString());
+						primfield.addContent(value);	
+						
+						element.addContent(primfield);
+					 
+				 }
+				 
+				 //same as first
+				  
+				  
+			  }
+			   root.getRootElement().addContent(field);
+			   root.getRootElement().addContent(element);
+			   XMLOutputter refout= new XMLOutputter();
+				refout.output(root, new FileWriter("src//test.xml"));
+
+				break;
+			
+			
+			
 			
 			
 			
 		// "PrimitiveArray":
 		case 3:
+			 field = new Element("Field");
+			 Element arrayO = new Element ("Object");
+			 Element arrayfield = new Element ("Field"); //maybe
+			  fields = obj.getClass().getDeclaredFields();
 		
-			
+			for(int i = 0; i< fields.length; i++)
+			{
+				
+				if(fields.getClass().isArray())
+				{
+					
+					arrayO = new Element("Object");
+					arrayO.setAttribute("class", fields[i].getDeclaringClass().getName());
+					String hashe = String.valueOf(fields[i].hashCode());
+					arrayO.setAttribute("id", String.valueOf(hashe));
+					
+					
+				Object iArray = fields[i].get(obj);
+					
+					
+					
+				}
+				
+				
+				
+				
+			}
 			
 		// "Oarray":
 		case 4:
