@@ -72,15 +72,15 @@ public class Serializer {
 			object = new Element("Object");
 			//System.out.print("three times");
 			fields[i].setAccessible(true);
-			
-			if(fields[i].getType().isArray())
+			                //System.out.print(fields[i].getType().isArray());
+			if(fields[i].getType().isArray() && (fields[i].getType().getComponentType().isPrimitive()))
 			{	
-				
+				System.out.println("is array no primitives");
 				arrayObj = new Element("Object");
 				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
 				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
-				Attribute type = new Attribute ("type", fields[i].getType().getComponentType().getName());
-				System.out.print(String.valueOf(fields[i].getType().getComponentType().getName()));
+				Attribute type = new Attribute ("type", String.valueOf(fields[i].getType().getComponentType()));
+				//System.out.print(String.valueOf(fields[i].getType().getComponentType()) + "LOLOLOL");
 				
 				arrayObj.setAttribute(decclass);
 				
@@ -92,11 +92,11 @@ public class Serializer {
 				Object iArray = fields[i].get(obj);
 				int arraylength = Array.getLength(iArray);
 				//System.out.print(arraylength);
-				
+				System.out.println("SHOULD NOT BE HERE!!!");
 				
 				Attribute arraylen = new Attribute("length" , String.valueOf(arraylength));
 				arrayObj.setAttribute(arraylen);
-						System.out.println("array length is " + arraylength);
+						//System.out.println("array length is " + arraylength);
 						
 						
 						
@@ -121,7 +121,7 @@ public class Serializer {
 			
 			
 				
-				if(fields[i].getType().isPrimitive() || Collection.class.isAssignableFrom(fields[i].getType()))
+			else if(fields[i].getType().isPrimitive() || Collection.class.isAssignableFrom(fields[i].getType()))
 				
 			{   
 				System.out.print("please can i die");
@@ -155,23 +155,67 @@ public class Serializer {
 			//is object reference
 			
 				else if(!fields[i].getType().isPrimitive())
-			{
-				System.out.println("sfgsfgsfgsdfgsfg");
+			{	
+				System.out.println(fields[i].getType().getComponentType().getName() + "read this");
 				newfield = new Element("Field");
 				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
 				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
-				Attribute type = new Attribute ("type", fields[i].getType().getName());
+				Attribute type = null; 
 				
+				
+				//System.out.print("outer loop");
+				//if(!(fields[i].getType().isArray()))
+				//{System.out.print("outer loop");
+				 //type = new Attribute ("type", fields[i].getType().getName());
+				//}
+				
+				//else 
+				{
+					
+					 type = new Attribute ("type", fields[i].getType().getComponentType().getName());
+					System.out.print("inner loopfgff");
+				}
+				
+				
+				//System.out.print("outer loop");
 				newfield.setAttribute(name);
 				newfield.setAttribute(decclass);
 				newfield.setAttribute(type);
 				
 				Object oref = fields[i].get(obj);
-				System.out.println(fields.length + oref.getClass().getName());
-				object.addContent(newfield);
-				rootelement.addContent(object);
-				this.serializer(oref);
+				//System.out.println(fields.length + oref.getClass().getName());
 				
+				
+				
+				
+				if(fields[i].getType().isArray())
+				{
+					
+					
+					int arraylength = Array.getLength(oref);
+					//System.out.print(arraylength + " arraylength");
+					
+					
+					Attribute arraylen = new Attribute("length" , String.valueOf(arraylength));
+					newfield.setAttribute(arraylen);
+					System.out.print("ARRAY LENGHTHTHTTHTH " + arraylength);
+					object.addContent(newfield);
+					rootelement.addContent(object);
+					
+					for(int k = 0; k< arraylength ; k++)
+					{
+						//rootelement.addContent(object);
+						Object nextone = Array.get(fields[i].get(obj), k);
+						this.serializer(nextone);
+					}
+					
+					
+				}
+				else {
+					object.addContent(newfield);
+					rootelement.addContent(object);
+				this.serializer(oref);
+				}
 				
 				
 				
