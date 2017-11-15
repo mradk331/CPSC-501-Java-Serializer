@@ -6,6 +6,7 @@ public class primitive implements Serializable{
 	int first;
 	int second;
 	int third;
+
 	
 	
 	

@@ -28,9 +28,9 @@ public class ObjectCreator {
 		
 		while(true)
 		{
-			first = scanner.nextLine();
+			//first = scanner.nextLine();
 			try {
-				
+				first = scanner.nextLine();	
 				
 				
 			
@@ -46,7 +46,7 @@ public class ObjectCreator {
 				primitive.print();
 				serialize = new Serializer();
 				serialize.updateChoice(choice);
-				serialize.Serializer(primitive);
+				serialize.serializer(primitive);
 
 				break;
 			}
@@ -62,7 +62,7 @@ public class ObjectCreator {
 				objectReference.print();
 				serialize = new Serializer();
 				serialize.updateChoice(choice);
-				serialize.Serializer(objectReference);
+				serialize.serializer(objectReference);
 				break;
 			}
 			
@@ -77,7 +77,7 @@ public class ObjectCreator {
 				primitiveArray.print();
 				serialize = new Serializer();
 				serialize.updateChoice(choice);
-				serialize.Serializer(primitiveArray);
+				serialize.serializer(primitiveArray);
 				break;
 			}
 			
@@ -93,7 +93,7 @@ public class ObjectCreator {
 				objectArray.print();
 				serialize = new Serializer();
 				serialize.updateChoice(choice);
-				serialize.Serializer(objectArray);
+				serialize.serializer(objectArray);
 				
 				break;
 				
@@ -112,7 +112,7 @@ public class ObjectCreator {
 				Collection.print();
 				serialize = new Serializer();
 				serialize.updateChoice(choice);
-				serialize.Serializer(Collection);
+				serialize.serializer(Collection);
 				
 				break;
 				

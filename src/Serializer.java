@@ -11,8 +11,9 @@ public class Serializer {
 
 	
 
-	static Element element = new Element("Serializer");
-	static Document root = new Document(element);
+	static Element rootelement = new Element("serialized");
+	static Document document = new Document(rootelement);
+	
 	int choice = 0;
 	int roothash = 0;
 	public void main(String[] args) throws IllegalArgumentException, IllegalAccessException, IOException
@@ -20,7 +21,7 @@ public class Serializer {
 		
 		
 		primitive obj = new primitive(1,2,3);
-		this.Serializer(obj);
+		this.serializer(obj);
 	}
 	
 	public void updateChoice(int choice)
@@ -30,204 +31,126 @@ public class Serializer {
 		
 	}
 	
-	public org.jdom.Document Serializer(Object obj) throws IllegalArgumentException, IllegalAccessException, IOException {
+	public org.jdom.Document serializer(Object obj) throws IllegalArgumentException, IllegalAccessException, IOException {
+		document.setRootElement(rootelement);
+		
+		Class toserialize = obj.getClass();
+		Element object = new Element("Object");
+		
+		String hash = String.valueOf(obj.hashCode());
+		String classname = obj.getClass().getName();
+		Attribute classat = new Attribute("Class", classname);
+		Attribute hashat = new Attribute("id" , hash); 
+		//object.setAttribute(classat);
+		//object.setAttribute(hashat);
+	
+		rootelement.setAttribute(new Attribute("Class",obj.getClass().getSimpleName()));
+		rootelement.setAttribute(new Attribute("ID", hash));
 		
 		
-		System.out.println(obj.getClass().getName() + " class Passed in to Serializer");
-		//do this first I think
+		if (obj == null) 
+			return document;
 		
 		
+		//Class toserialize = obj.getClass();
 		
-		root.setRootElement(element);
+		//System.out.println(obj);
 		
-		
-		
-		
-		Element element = new Element ("Object");
-		
-		String hash =Integer.toString(obj.hashCode());
-		
-		if(roothash == 0)
-		roothash = obj.hashCode();
-		
-	//name followed by hash	
-		element.setAttribute(new Attribute("Class",obj.getClass().getSimpleName()));
-		element.setAttribute(new Attribute("ID", hash));
-		
-		Element field = null;
 		Field[] fields = null;
+		 fields =  obj.getClass().getDeclaredFields();
+		 Element newfield = null;
+		Element field = new Element("Field");
+	
 		
-		switch(choice)
+		
+		for (int i = 0; i < fields.length; i++)
 		{
-		
-		
-		// "primitive":
-		case 1:
+			Element arrayObj = null;
+			object = new Element("Object");
+			//System.out.print("three times");
+			fields[i].setAccessible(true);
 			
-		field = null;
-		fields = obj.getClass().getDeclaredFields();	
-		
-		for(int i = 0; i < fields.length; i++) {
-			field = new Element("Field");
-			Attribute attribute = new Attribute("Name" , fields[i].getName());
-			
-			field.setAttribute(attribute);
-			field.setAttribute("DeclaingClass", fields[i].getDeclaringClass().getSimpleName());
-			
-			
-			
-			Element value = new Element("Value");
-			fields[i].get(obj);  //vlue	
-			//System.out.println(fields[i].get(obj) + "pleasze do somethine");
-			value.addContent(fields[i].get(obj).toString());		
-			field.addContent(value);	
-			element.addContent(field);
-			//1root.getRootElement().addContent(element);
-				}
-		
-		
-		
-		
-		
-		
-			//element.addContent(field);
-			//root.getRootElement().addContent(element);
-		
-		     root.getRootElement().addContent(element);
-			//System.out.println(root. " Is there anything here?") ;
-			XMLOutputter out= new XMLOutputter();
-			out.output(root, new FileWriter("src//test.xml"));
-
-			break;
-			
-			
-		// "Oref":
-		case 2:
-			 field = new Element("Field");
-			 Element primfield = new Element ("Field"); //maybe
-			  fields = obj.getClass().getDeclaredFields();
-			
-			  for(int i = 0; i <fields.length; i++)
-			  {
-				 if(!fields[i].getType().isPrimitive()) 
-				 { 
-					 field = new Element("Field");
-					 String hashcode = String.valueOf(fields[i].hashCode());
-					 Attribute name = new Attribute("Name", fields[i].getName());
-					 Attribute decclass = new Attribute("DeclaringClass", fields[i].getDeclaringClass().getName());
-					 field.setAttribute(name);
-					 field.setAttribute(decclass);
-					 System.out.println(decclass.getName());
-					 Element ref = new Element("Reference");
-					 ref.addContent(hashcode);
-					 field.addContent(ref);
-					// element.addContent(field);
-					 
-				 }
-				 
-				 else
-				 {
-					 
-					 //same as first primitive
-					 
-					    primfield = new Element("Field");
-						Attribute attribute = new Attribute("Name" , fields[i].getName());
-						
-						primfield.setAttribute(attribute);
-						primfield.setAttribute("DeclaingClass", fields[i].getDeclaringClass().getSimpleName());
-						
-						
-						
-						Element value = new Element("Value");
-						fields[i].get(obj);  //vlue	
-						//System.out.println(fields[i].get(obj) + "pleasze do somethine");
-						value.addContent(fields[i].get(obj).toString());		
-						System.out.print(fields[i].get(obj).toString());
-						primfield.addContent(value);	
-						
-						element.addContent(primfield);
-					 
-				 }
-				 
-				 //same as first
-				  
-				  
-			  }
-			   root.getRootElement().addContent(field);
-			   root.getRootElement().addContent(element);
-			   XMLOutputter refout= new XMLOutputter();
-				refout.output(root, new FileWriter("src//test.xml"));
-
-				break;
-			
-			
-			
-			
-			
-			
-		// "PrimitiveArray":except that an additional length attribute is used, and each element of the array will be 
-				//stored as content to a value or reference element, depending on the component type. For example:
-
-
-		case 3:
-			 field = new Element("Field");
-			 Element arrayO = new Element ("Object");
-			 ///Element arrayfield = new Element ("Field"); //maybe
-			  fields = obj.getClass().getDeclaredFields();
-		
-			for(int i = 0; i< fields.length; i++)
-			{
-				System.out.print("Please get hrer");
-				if(fields[i].getType().isArray());
-				{
-					System.out.print("Please get hrer");
-					arrayO = new Element("Object");
-					arrayO.setAttribute("class", fields[i].getDeclaringClass().getName());
-					String hashe = String.valueOf(fields[i].hashCode());
-					arrayO.setAttribute("id", String.valueOf(hashe));
-					
-					
+			if(fields[i].getType().isArray())
+			{	
+				
+				arrayObj = new Element("Object");
+				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
+				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
+				
+				arrayObj.setAttribute(decclass);
+				
+				arrayObj.setAttribute(name);
+				
+				
+				
+				
 				Object iArray = fields[i].get(obj);
-					
-					int length = Array.getLength(iArray);
-					arrayO.setAttribute("length", String.valueOf(length));
-					
-					for (int j = 0 ; j < length; j++)
-					{
-						Element value = new Element ("value");
-						value.addContent(String.valueOf(Array.get(fields[i].get(obj), j)));
-						Element ref = new Element ("reference");
-						ref.addContent(hashe);
-						arrayO.addContent(value);
-						arrayO.addContent(ref);
-						
-					}
-					
-				}
+				int arraylength = Array.getLength(iArray);
+				
+				
+				
+				Attribute arraylen = new Attribute("length" , String.valueOf(arraylength));
+				arrayObj.setAttribute(arraylen);
+						System.out.println("array length is " + arraylength);
+						//System.out.print("kill me");
+			}
+			
+			
+			
+			
+			
+			if(fields[i].getType().isPrimitive() || Collection.class.isAssignableFrom(fields[i].getType()))
+			{   
+				System.out.print(fields[i].getName());
+				
+				newfield = new Element("Field");
+				
+				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
+				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
+				//System.out.print(String.valueOf(fields[i].getName()));
+				
+				
+				
+				newfield.setAttribute(name);
+				newfield.setAttribute(decclass);
+				
+				
+				Element value = new Element("value");
+				value.addContent((fields[i].get(obj).toString()));
+				newfield.addContent(value);
+				//field addContent, or setArrribute
+				
+				object.addContent(newfield);
+				//rootelement.addContent(object);
+							//System.out.println("three teim");	
+							
+			}
+			
+			
+			
+			
+			else
+			{
+				
+				
+				
 				
 				
 				
 				
 			}
-			root.getRootElement().addContent(arrayO);
-			XMLOutputter arrayout= new XMLOutputter();
-			arrayout.output(root, new FileWriter("src//test.xml"));
-
-		// "Oarray":
-		case 4:
 			
 			
 			
-		// "collection":
-		case 5:
+			document.getRootElement().addContent(object);
 			
-		
+			
 		}
+		System.out.print("please get here");
+		XMLOutputter out = new XMLOutputter();
+		out.output(rootelement, new FileWriter("src//test.xml"));
 		
-		return root;
-		//return null;
-		
-		
+		return null;
 	}
 	
 	
