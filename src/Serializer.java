@@ -76,44 +76,66 @@ public class Serializer {
 				arrayObj = new Element("Object");
 				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
 				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
+				Attribute type = new Attribute ("type", fields[i].getType().getComponentType().getName());
+				System.out.print(String.valueOf(fields[i].getType().getComponentType().getName()));
 				
 				arrayObj.setAttribute(decclass);
 				
 				arrayObj.setAttribute(name);
-				
+				arrayObj.setAttribute(type);
 				
 				
 				
 				Object iArray = fields[i].get(obj);
 				int arraylength = Array.getLength(iArray);
-				
+				//System.out.print(arraylength);
 				
 				
 				Attribute arraylen = new Attribute("length" , String.valueOf(arraylength));
 				arrayObj.setAttribute(arraylen);
 						System.out.println("array length is " + arraylength);
+						
+						
+						
+						
+						for(int j = 0; j < arraylength; j++)
+						{
+							
+							Element value = new Element("value");
+							Attribute index = new Attribute("index", String.valueOf(j));
+							
+							
+							value.addContent(String.valueOf(Array.get(fields[i].get(obj), j)));
+							value.setAttribute(index);
+							//System.out.println(String.valueOf(Array.get(fields[i].get(obj), j)));
+							arrayObj.addContent(value);
+							
+							
+						}
 						//System.out.print("kill me");
+						object = arrayObj;
 			}
 			
 			
-			
-			
-			
-			if(fields[i].getType().isPrimitive() || Collection.class.isAssignableFrom(fields[i].getType()))
+				
+				if(fields[i].getType().isPrimitive() || Collection.class.isAssignableFrom(fields[i].getType()))
+				
 			{   
-				System.out.print(fields[i].getName());
+				System.out.print("please can i die");
 				
 				newfield = new Element("Field");
 				
 				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
 				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
+				Attribute type = new Attribute ("type", fields[i].getType().getName());
 				//System.out.print(String.valueOf(fields[i].getName()));
 				
+				System.out.print(fields[i].getType().getName());
 				
 				
 				newfield.setAttribute(name);
 				newfield.setAttribute(decclass);
-				
+				newfield.setAttribute(type);
 				
 				Element value = new Element("value");
 				value.addContent((fields[i].get(obj).toString()));
@@ -123,15 +145,28 @@ public class Serializer {
 				object.addContent(newfield);
 				//rootelement.addContent(object);
 							//System.out.println("three teim");	
-							
+							//System.out.println("primitive");
 			}
-			
-			
-			
-			
-			else
-			{
 				
+			
+			//is object reference
+			
+			if(!fields[i].getType().isPrimitive())
+			{
+				System.out.println("sfgsfgsfgsdfgsfg");
+				newfield = new Element("Field");
+				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
+				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
+				Attribute type = new Attribute ("type", fields[i].getType().getName());
+				
+				newfield.setAttribute(name);
+				newfield.setAttribute(decclass);
+				newfield.setAttribute(type);
+				
+				Object oref = fields[i].get(obj);
+				System.out.println(fields.length + oref.getClass().getName());
+				
+				this.serializer(oref);
 				
 				
 				
