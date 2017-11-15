@@ -156,26 +156,29 @@ public class Serializer {
 			
 				else if(!fields[i].getType().isPrimitive())
 			{	
-				System.out.println(fields[i].getType().getComponentType().getName() + "read this");
+				//System.out.println(fields[i].getType().getComponentType().getName() + "read this");
 				newfield = new Element("Field");
 				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
 				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
 				Attribute type = null; 
 				
 				
-				//System.out.print("outer loop");
+				System.out.print("outer loop");
 				//if(!(fields[i].getType().isArray()))
 				//{System.out.print("outer loop");
 				 //type = new Attribute ("type", fields[i].getType().getName());
 				//}
 				
-				//else 
+				if((fields[i].getType().isArray()))
 				{
-					
-					 type = new Attribute ("type", fields[i].getType().getComponentType().getName());
 					System.out.print("inner loopfgff");
+					 type = new Attribute ("type", fields[i].getType().getComponentType().getName());
+					//System.out.print("inner loopfgff");
 				}
-				
+				else{
+					type = new Attribute ("type", fields[i].getType().getName());
+					
+				}
 				
 				//System.out.print("outer loop");
 				newfield.setAttribute(name);
