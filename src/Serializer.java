@@ -13,6 +13,7 @@ public class Serializer {
 
 	static Element rootelement = new Element("serialized");
 	static Document document = new Document(rootelement);
+	static int read = 0;
 	
 	int choice = 0;
 	int roothash = 0;
@@ -43,10 +44,12 @@ public class Serializer {
 		Attribute hashat = new Attribute("id" , hash); 
 		//object.setAttribute(classat);
 		//object.setAttribute(hashat);
-	
+	if(read == 0)
+	{
 		rootelement.setAttribute(new Attribute("Class",obj.getClass().getSimpleName()));
 		rootelement.setAttribute(new Attribute("ID", hash));
-		
+		read =1;
+	}	
 		
 		if (obj == null) 
 			return document;
@@ -60,7 +63,7 @@ public class Serializer {
 		 fields =  obj.getClass().getDeclaredFields();
 		 Element newfield = null;
 		Element field = new Element("Field");
-	
+	   
 		
 		
 		for (int i = 0; i < fields.length; i++)
@@ -130,7 +133,7 @@ public class Serializer {
 				Attribute type = new Attribute ("type", fields[i].getType().getName());
 				//System.out.print(String.valueOf(fields[i].getName()));
 				
-				System.out.print(fields[i].getType().getName());
+				//System.out.print(fields[i].getType().getName());
 				
 				
 				newfield.setAttribute(name);
@@ -151,7 +154,7 @@ public class Serializer {
 			
 			//is object reference
 			
-			if(!fields[i].getType().isPrimitive())
+				else if(!fields[i].getType().isPrimitive())
 			{
 				System.out.println("sfgsfgsfgsdfgsfg");
 				newfield = new Element("Field");
@@ -165,7 +168,8 @@ public class Serializer {
 				
 				Object oref = fields[i].get(obj);
 				System.out.println(fields.length + oref.getClass().getName());
-				
+				object.addContent(newfield);
+				rootelement.addContent(object);
 				this.serializer(oref);
 				
 				
