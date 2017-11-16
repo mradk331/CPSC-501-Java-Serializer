@@ -33,4 +33,12 @@ public class Oarray implements Serializable{
 		primArray[1].print();
 		System.out.println();
 	}
+	
+	public int[] getcontents()
+	{
+		int [] combine = new int[] {first, second, third};
+		return combine;
+
+
+	}
 }

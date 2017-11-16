@@ -2,6 +2,9 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.lang.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.jdom.*;
 //import org.jdom2.*;
@@ -12,7 +15,7 @@ public class Deserializer {
 
 	
 	
-	public static void deserialize(Document doc)throws IllegalArgumentException, IllegalAccessException, IOException, JDOMException {
+	public static List <?> deserialize(Document doc)throws IllegalArgumentException, IllegalAccessException, IOException, JDOMException, ClassNotFoundException, InstantiationException, InvocationTargetException {
 	System.out.println();
 	Document open = new Document();
 	SAXBuilder builder = new SAXBuilder();
@@ -48,7 +51,7 @@ public class Deserializer {
 		System.out.print(childrens.get(0).getAttribute("name").getValue() + " is type ");
 		if(childrenvalues.size() == 1)
 		{ System.out.print(childrens.get(0).getAttribute("type").getValue() + " has value " + childrenvalues.get(0).getAttribute("value").getValue());
-			
+			primtypes.add(childrens.get(0).getAttribute("type").getValue());
 		
 			primvalues.add(childrenvalues.get(0).getAttribute("value").getValue());
 		
@@ -61,12 +64,15 @@ public class Deserializer {
 		{
 			
 			System.out.println(childrens.get(0).getAttribute("type").getValue() + " and has values ");
+			primtypes.add(childrens.get(0).getAttribute("type").getValue());
+			
 			for (int k = 0 ; k< childrenvalues.size(); k++)
 			{
 				
 				System.out.println("index " + k + " has value " + childrenvalues.get(k).getAttribute("value").getValue());
 				primvalues.add(childrenvalues.get(k).getAttribute("value").getValue());
 				declaringclass.add(childrens.get(0).getAttribute("declaringclass").getValue());
+				
 			}
 			
 		}
@@ -94,23 +100,21 @@ public class Deserializer {
      {
 	     
 	     
-	     if((String.valueOf(declaringclass.get(n)).equals(rootClass)) )
+	     if((String.valueOf(declaringclass.get(n)).equals(rootClass)) && !primtypes.get(n).toString().contains("java.") )
 	     
     	 arguments.add(primvalues.get(n));
 	
    
      }
      
-     System.out.println(arguments);
-     System.out.println(primvalues);
-     System.out.println(declaringclass);
-	{
-	
-	
-	
-	
-	}
-     
+     return arguments;
+    //System.out.println(arguments);
+    //System.out.println(primtypes);
+     //System.out.println(primvalues);
+     //System.out.println(declaringclass);
+   
+
+	 //Constructor<?> cons = created.getConstructor(arguments);
      
 	}
 	

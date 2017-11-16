@@ -32,7 +32,7 @@ public class Serializer {
 		
 	}
 	
-	public org.jdom.Document serializer(Object obj) throws IllegalArgumentException, IllegalAccessException, IOException, JDOMException 
+	public org.jdom.Document serializer(Object obj) throws IllegalArgumentException, IllegalAccessException, IOException, JDOMException, ClassNotFoundException, InstantiationException, InvocationTargetException 
 	{
 		//System.out.println("Why");
 		document.setRootElement(rootelement);
@@ -249,15 +249,20 @@ public class Serializer {
 			
 		}
 		//System.out.print("please get here");
+		deserialize();
+		return null;
+	}
+	public void deserialize() throws IOException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, JDOMException, InstantiationException, InvocationTargetException
+	{
+		
 		XMLOutputter out = new XMLOutputter();
 		out.output(rootelement, new FileWriter("src//test.xml"));
 		
 		//testing
 		Deserializer deserializer = new Deserializer();
 		Deserializer.deserialize(document);
-		return null;
+		
 	}
-	
 	
 	
 	

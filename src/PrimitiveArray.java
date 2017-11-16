@@ -33,4 +33,11 @@ public class PrimitiveArray implements Serializable{
 		
 	}
 	
+	public int[] getcontents()
+			{
+		return primArray;
+		
+		
+			}
+	
 }

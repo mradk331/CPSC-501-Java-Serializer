@@ -119,16 +119,16 @@ public class ObjectCreator {
 			}
 			}
 			
+			
 			catch(Exception e)
 			{
-			
+				System.out.println("Please choose a valid argument");
 			}
-			System.out.println("Please choose a valid argument");
-			
+			//System.out.println("Please choose a valid argument");
+			break;
 			
 		}
 			scanner.close();
-		
 		
 		
 		
