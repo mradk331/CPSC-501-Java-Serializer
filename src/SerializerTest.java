@@ -33,7 +33,7 @@ import java.util.*
 		list.add("2");
 		list.add("3");
 		Deserializer deserialize = new Deserializer();
-		assertEquals(list, deserialize.deserialize(null));
+		assertEquals(list, Deserializer.deserialize(null, "src//test.xml"));
 	    serialize = null;
 		
 	}
@@ -54,7 +54,7 @@ import java.util.*
 		list.add("2");
 		list.add("3");
 		Deserializer deserialize = new Deserializer();
-		assertEquals(list, deserialize.deserialize(null));
+		assertEquals(list, deserialize.deserialize(null, "src//test.xml"));
 	}
 
 	
@@ -70,7 +70,7 @@ public void test2() throws IllegalArgumentException, IllegalAccessException, Cla
 		list.add("2");
 		list.add("3");
 		Deserializer deserialize = new Deserializer();
-		assertEquals(list, deserialize.deserialize(null));
+		assertEquals(list, deserialize.deserialize(null, "src//test.xml"));
 	}
 	
 	

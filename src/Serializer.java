@@ -259,8 +259,8 @@ public class Serializer {
 		out.output(rootelement, new FileWriter("src//test.xml"));
 		
 		//testing
-		Deserializer deserializer = new Deserializer();
-		Deserializer.deserialize(document);
+		//Deserializer deserializer = new Deserializer();
+		//Deserializer.deserialize(document);
 		
 	}
 	

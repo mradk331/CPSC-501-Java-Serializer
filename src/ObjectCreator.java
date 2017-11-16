@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -8,7 +9,7 @@ public class ObjectCreator {
 	
 	
 	
-	public static void main(String [] args)
+	public static void main(String [] args) throws IOException
 	{
 		Scanner scanner = new Scanner(System.in);
 		Serializer serialize;
@@ -128,7 +129,8 @@ public class ObjectCreator {
 			break;
 			
 		}
-			scanner.close();
+		xmlclient xml = new xmlclient("src//test.xml", 3333); 	
+		scanner.close();
 		
 		
 		

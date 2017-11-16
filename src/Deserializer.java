@@ -15,11 +15,14 @@ public class Deserializer {
 
 	
 	
-	public static List <?> deserialize(Document doc)throws IllegalArgumentException, IllegalAccessException, IOException, JDOMException, ClassNotFoundException, InstantiationException, InvocationTargetException {
+	public static List <?> deserialize(Document doc, String filename)throws IllegalArgumentException, IllegalAccessException, IOException, JDOMException, ClassNotFoundException, InstantiationException, InvocationTargetException {
 	System.out.println();
 	Document open = new Document();
 	SAXBuilder builder = new SAXBuilder();
-	doc = builder.build("src//test.xml");
+	
+	//for testing 
+	if (filename != null )
+		doc = builder.build(filename);
 	//File xmlFile = new File("xmlfile.xml"); 
 	Element root = doc.getRootElement();
 	//System.out.println(root + "root");
@@ -95,18 +98,26 @@ public class Deserializer {
 	}
 	
 	List arguments = new ArrayList();
-	
+	try
+	{
      for(int n = 0; n < primvalues.size(); n++)
      {
 	     
-	     
-	     if((String.valueOf(declaringclass.get(n)).equals(rootClass)) && !primtypes.get(n).toString().contains("java.") )
-	     
+    	 if(n < declaringclass.size() && n < primvalues.size()) 
+    	 {
+	     if((String.valueOf(declaringclass.get(n)).equals(rootClass)) && !primtypes.get(n).toString().contains("java.")  )
+	    	 
+	    	 
+	    	 
+	    	 
+	    	 
     	 arguments.add(primvalues.get(n));
-	
+    	 }
    
      }
-     
+	}
+	
+	catch (Exception e) { }
      return arguments;
     //System.out.println(arguments);
     //System.out.println(primtypes);
