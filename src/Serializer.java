@@ -22,7 +22,7 @@ public class Serializer {
 		
 		
 		primitive obj = new primitive(1,2,3);
-		this.serializer(obj);
+		//this.serializer(obj);
 	}
 	
 	public void updateChoice(int choice)
@@ -32,7 +32,9 @@ public class Serializer {
 		
 	}
 	
-	public org.jdom.Document serializer(Object obj) throws IllegalArgumentException, IllegalAccessException, IOException {
+	public org.jdom.Document serializer(Object obj) throws IllegalArgumentException, IllegalAccessException, IOException, JDOMException 
+	{
+		//System.out.println("Why");
 		document.setRootElement(rootelement);
 		
 		Class toserialize = obj.getClass();
@@ -42,8 +44,8 @@ public class Serializer {
 		String classname = obj.getClass().getName();
 		Attribute classat = new Attribute("Class", classname);
 		Attribute hashat = new Attribute("id" , hash); 
-		//object.setAttribute(classat);
-		//object.setAttribute(hashat);
+		object.setAttribute(classat);
+		object.setAttribute(hashat);
 	if(read == 0)
 	{
 		rootelement.setAttribute(new Attribute("Class",obj.getClass().getSimpleName()));
@@ -68,6 +70,8 @@ public class Serializer {
 		
 		for (int i = 0; i < fields.length; i++)
 		{
+			
+			
 			Element arrayObj = null;
 			object = new Element("Object");
 			//System.out.print("three times");
@@ -75,17 +79,18 @@ public class Serializer {
 			                //System.out.print(fields[i].getType().isArray());
 			if(fields[i].getType().isArray() && (fields[i].getType().getComponentType().isPrimitive()))
 			{	
-				System.out.println("is array no primitives");
+				//System.out.println("is array no primitives");
 				arrayObj = new Element("Object");
+				newfield = new Element("Field");
 				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
 				Attribute name = new Attribute("name", String.valueOf(fields[i].getName()));
 				Attribute type = new Attribute ("type", String.valueOf(fields[i].getType().getComponentType()));
 				//System.out.print(String.valueOf(fields[i].getType().getComponentType()) + "LOLOLOL");
 				
-				arrayObj.setAttribute(decclass);
+				newfield.setAttribute(decclass);
 				
-				arrayObj.setAttribute(name);
-				arrayObj.setAttribute(type);
+				newfield.setAttribute(name);
+				newfield.setAttribute(type);
 				
 				
 				
@@ -95,7 +100,7 @@ public class Serializer {
 				System.out.println("SHOULD NOT BE HERE!!!");
 				
 				Attribute arraylen = new Attribute("length" , String.valueOf(arraylength));
-				arrayObj.setAttribute(arraylen);
+				newfield.setAttribute(arraylen);
 						//System.out.println("array length is " + arraylength);
 						
 						
@@ -108,14 +113,18 @@ public class Serializer {
 							Attribute index = new Attribute("index", String.valueOf(j));
 							
 							
-							value.addContent(String.valueOf(Array.get(fields[i].get(obj), j)));
+							//value.addContent(String.valueOf(Array.get(fields[i].get(obj), j)));
+							Attribute valueatt = new Attribute("value",String.valueOf(Array.get(fields[i].get(obj), j)));
+							value.setAttribute(valueatt);
 							value.setAttribute(index);
+							
 							//System.out.println(String.valueOf(Array.get(fields[i].get(obj), j)));
-							arrayObj.addContent(value);
+							newfield.addContent(value);
 							
 							
 						}
 						//System.out.print("kill me");
+						arrayObj.addContent(newfield);
 						object = arrayObj;
 			}
 			
@@ -124,7 +133,7 @@ public class Serializer {
 			else if(fields[i].getType().isPrimitive() || Collection.class.isAssignableFrom(fields[i].getType()))
 				
 			{   
-				System.out.print("please can i die");
+				
 				
 				newfield = new Element("Field");
 				
@@ -141,8 +150,11 @@ public class Serializer {
 				newfield.setAttribute(type);
 				
 				Element value = new Element("value");
-				value.addContent((fields[i].get(obj).toString()));
+				//value.addContent((fields[i].get(obj).toString()));
+				Attribute valueatt = new Attribute("value",fields[i].get(obj).toString() );
+				value.setAttribute(valueatt);
 				newfield.addContent(value);
+				
 				//field addContent, or setArrribute
 				
 				object.addContent(newfield);
@@ -155,7 +167,7 @@ public class Serializer {
 			//is object reference
 			
 				else if(!fields[i].getType().isPrimitive())
-			{	
+			{	//System.out.println("not working");
 				//System.out.println(fields[i].getType().getComponentType().getName() + "read this");
 				newfield = new Element("Field");
 				Attribute decclass = new Attribute("declaringclass", fields[i].getDeclaringClass().getName());		
@@ -163,7 +175,7 @@ public class Serializer {
 				Attribute type = null; 
 				
 				
-				System.out.print("outer loop");
+				
 				//if(!(fields[i].getType().isArray()))
 				//{System.out.print("outer loop");
 				 //type = new Attribute ("type", fields[i].getType().getName());
@@ -171,11 +183,12 @@ public class Serializer {
 				
 				if((fields[i].getType().isArray()))
 				{
-					System.out.print("inner loopfgff");
+					
 					 type = new Attribute ("type", fields[i].getType().getComponentType().getName());
 					//System.out.print("inner loopfgff");
 				}
 				else{
+					
 					type = new Attribute ("type", fields[i].getType().getName());
 					
 				}
@@ -201,12 +214,14 @@ public class Serializer {
 					
 					Attribute arraylen = new Attribute("length" , String.valueOf(arraylength));
 					newfield.setAttribute(arraylen);
-					System.out.print("ARRAY LENGHTHTHTTHTH " + arraylength);
-					object.addContent(newfield);
+					//System.out.print("ARRAY LENGHTHTHTTHTH " + arraylength);
+					//object.addContent(newfield);
 					rootelement.addContent(object);
-					
+					object.addContent(newfield);
 					for(int k = 0; k< arraylength ; k++)
 					{
+						//rootelement.addContent(object)
+						//object.addContent(newfield);
 						//rootelement.addContent(object);
 						Object nextone = Array.get(fields[i].get(obj), k);
 						this.serializer(nextone);
@@ -215,6 +230,7 @@ public class Serializer {
 					
 				}
 				else {
+					//System.out.print("never get here");
 					object.addContent(newfield);
 					rootelement.addContent(object);
 				this.serializer(oref);
@@ -232,10 +248,13 @@ public class Serializer {
 			
 			
 		}
-		System.out.print("please get here");
+		//System.out.print("please get here");
 		XMLOutputter out = new XMLOutputter();
 		out.output(rootelement, new FileWriter("src//test.xml"));
 		
+		//testing
+		Deserializer deserializer = new Deserializer();
+		Deserializer.deserialize(document);
 		return null;
 	}
 	

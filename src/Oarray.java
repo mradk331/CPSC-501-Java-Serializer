@@ -3,12 +3,21 @@ import java.io.*;
 
 public class Oarray implements Serializable{
 
+	
+	
+	int first;
+	int second;
+	int third;
 	primitive[] primArray;
 	
 	
 	public Oarray (int first, int second, int third)
 	{
 		
+		
+		this.first = first;
+		this.second = second;
+		this.third = third;
 		primArray = new primitive[2];
 		primArray[0] = new primitive(first, second, third);
 		primArray[1] = new primitive(first, second, third);
